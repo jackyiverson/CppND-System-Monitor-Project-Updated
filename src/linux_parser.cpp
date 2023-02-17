@@ -3,13 +3,26 @@
 #include <sstream>
 #include <string>
 #include <vector>
-
+#include <iostream>
+#include <sstream>
+#include <algorithm>
+#include <regex>
+#include <iomanip>
 #include "linux_parser.h"
 
 using std::stof;
 using std::string;
 using std::to_string;
 using std::vector;
+using std::ifstream;
+using std::istringstream;
+using std::getline;
+using std::cout;
+using std::sort;
+using std::reverse;
+using std::setw;
+using std::left;
+using std::right;
 
 // DONE: An example of how to read data from the filesystem
 string LinuxParser::OperatingSystem() {
@@ -71,7 +84,17 @@ vector<int> LinuxParser::Pids() {
 float LinuxParser::MemoryUtilization() { return 0.0; }
 
 // TODO: Read and return the system uptime
-long LinuxParser::UpTime() { return 0; }
+long LinuxParser::UpTime() {
+  string line;
+  long uptime;
+  ifstream stream(kProcDirectory + kUptimeFilename);
+  if (stream.is_open()){
+    getline(stream, line);
+    istringstream linestream(line);
+    linestream >> uptime;
+  }
+  return uptime;
+}
 
 // TODO: Read and return the number of jiffies for the system
 long LinuxParser::Jiffies() { return 0; }
