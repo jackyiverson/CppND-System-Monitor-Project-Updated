@@ -10,7 +10,7 @@ using namespace LinuxParser;
 
 // TODO: Return the aggregate CPU utilization
 float Processor::Utilization() {
-    std::string line, key;
+    std::string line;
     std::ifstream stream(kProcDirectory + kStatFilename);
     std::getline(stream, line);
     
@@ -18,9 +18,12 @@ float Processor::Utilization() {
     std::string cpu_name;
     int user, nice, sys, idle, iowait, irq, softirq, steal, guest, guest_nice;
     iss >> cpu_name >> user >> nice >> sys >> idle >> iowait >> irq >> softirq >> steal >> guest >> guest_nice;
-    int idle_time = idle + iowait;
-    int total_time = user + nice + sys + idle_time + irq + softirq + steal;
-    float utilization = static_cast<float> (total_time - idle_time) / total_time;
+    long idle_time = idle + iowait;
+    long total_time = user + nice + sys + idle_time + irq + softirq + steal;
+    float utilization = 1.0 * (total_time - idle_time) / total_time;
+
+    IdleP = idle_time;
+    TotalP = total_time;
   
     return utilization;
 }
