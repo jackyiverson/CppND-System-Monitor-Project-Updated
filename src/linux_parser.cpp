@@ -8,7 +8,10 @@
 #include <algorithm>
 #include <regex>
 #include <iomanip>
+#include <fstream>
+#include <map>
 #include "linux_parser.h"
+
 
 using std::stof;
 using std::string;
@@ -81,13 +84,31 @@ vector<int> LinuxParser::Pids() {
 }
 
 // TODO: Read and return the system memory utilization
-float LinuxParser::MemoryUtilization() { return 0.0; }
+float LinuxParser::MemoryUtilization() {
+  string line, key;
+  float value, MemTotal, MemFree;
+  std::ifstream stream(kProcDirectory + kMeminfoFilename);
+  if (stream.is_open()){
+    while(std::getline(stream, line)){
+      std::istringstream linestream(line);
+      linestream >> key >> value;
+      if (key == "MemTotal:"){
+        MemTotal = value;
+
+      }
+      else if (key == "MemFree:"){
+        MemFree = value;
+      }    
+    }
+  }
+  return (MemTotal - MemFree) / MemTotal;      
+}
 
 // TODO: Read and return the system uptime
 long LinuxParser::UpTime() {
   string line;
   long uptime;
-  ifstream stream(kProcDirectory + kUptimeFilename);
+  std::ifstream stream(kProcDirectory + kUptimeFilename);
   if (stream.is_open()){
     getline(stream, line);
     istringstream linestream(line);
