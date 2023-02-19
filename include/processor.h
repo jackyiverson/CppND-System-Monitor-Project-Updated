@@ -1,5 +1,6 @@
 #ifndef PROCESSOR_H
 #define PROCESSOR_H
+#include <string>
 
 class Processor {
  public:
@@ -7,8 +8,8 @@ class Processor {
 
   // TODO: Declare any necessary private members
  private:
-  long IdleP{0};
-  long TotalP{0};
+  // long prevIdle_{0};
+  // long prevTotal_{0};
 };
 
 #endif
